@@ -1625,41 +1625,69 @@
         createParticles();
     </script>
 
-    <script>
-        // Backend API URL
-        const API_URL = 'http://localhost:3000/api';
+    <script type="module">
+        // Import Firebase
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-app.js";
+        import { getFirestore, collection, addDoc, query, where, getDocs, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.11.0/firebase-firestore.js";
+        
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyBTf0IwfY6iTRBSS5Ruw7TlJAtFT2j-rV0",
+            authDomain: "flipkartcollege.firebaseapp.com",
+            projectId: "flipkartcollege",
+            storageBucket: "flipkartcollege.firebasestorage.app",
+            messagingSenderId: "681806986839",
+            appId: "1:681806986839:web:9d8ec56ac0b0a018a0ed12",
+            measurementId: "G-TCJ1BW1FFR"
+        };
 
-        // Email Capture with Backend API
-        async function captureEmail(inputId) {
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Email Capture with Firestore
+        window.captureEmail = async function(inputId) {
             const email = document.getElementById(inputId).value.trim();
             if (email && email.includes('@')) {
                 try {
-                    const response = await fetch(`${API_URL}/subscribe`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ email })
-                    });
+                    // Check if email already exists
+                    const q = query(collection(db, "emails"), where("email", "==", email.toLowerCase()));
+                    const querySnapshot = await getDocs(q);
                     
-                    const data = await response.json();
-                    
-                    if (response.ok) {
-                        alert('Thanks for signing up! You\'ll be the first to know when we launch. 🚀');
-                        document.getElementById(inputId).value = '';
-                    } else if (response.status === 409) {
+                    if (!querySnapshot.empty) {
                         alert('This email is already registered! 🎉');
                         document.getElementById(inputId).value = '';
-                    } else {
-                        alert(data.error || 'Something went wrong. Please try again.');
+                        return;
                     }
+                    
+                    // Add new email to Firestore
+                    await addDoc(collection(db, "emails"), {
+                        email: email.toLowerCase(),
+                        date: serverTimestamp()
+                    });
+                    
+                    alert('Thanks for signing up! You\'ll be the first to know when we launch. 🚀');
+                    document.getElementById(inputId).value = '';
                 } catch (error) {
-                    console.error("Error:", error);
-                    alert('Unable to connect to server. Please try again later.');
+                    console.error("Error adding email: ", error);
+                    alert('Something went wrong. Please try again.');
                 }
             } else {
                 alert('Please enter a valid email address.');
             }
-        }
+        };
 
+        // Enter key for email inputs
+        document.getElementById('heroEmail').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') captureEmail('heroEmail');
+        });
+
+        document.getElementById('ctaEmail').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') captureEmail('ctaEmail');
+        });
+    </script>
+
+    <script>
         // Parallax Effect (disabled on mobile)
         const isTouchDevice = window.matchMedia('(hover: none) and (pointer: coarse)').matches;
         
@@ -1675,15 +1703,6 @@
                 });
             });
         }
-
-        // Enter key for email inputs
-        document.getElementById('heroEmail').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') captureEmail('heroEmail');
-        });
-
-        document.getElementById('ctaEmail').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') captureEmail('ctaEmail');
-        });
     </script>
 </body>
 </html>

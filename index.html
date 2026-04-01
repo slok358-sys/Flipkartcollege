@@ -1573,23 +1573,22 @@
             document.getElementById(sectionId).scrollIntoView({ behavior: 'smooth' });
         }
 
-        // Countdown Timer
+        // Countdown Timer - Fixed launch date: May 1, 2026
+        const LAUNCH_DATE = new Date('2026-05-01T00:00:00').getTime();
+        
         function updateCountdown() {
-            const launchDate = new Date();
-            launchDate.setDate(launchDate.getDate() + 30); // Launch in 30 days
-
             const now = new Date().getTime();
-            const distance = launchDate - now;
+            const distance = LAUNCH_DATE - now;
 
             const days = Math.floor(distance / (1000 * 60 * 60 * 24));
             const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
             const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-            document.getElementById('days').textContent = String(days).padStart(2, '0');
-            document.getElementById('hours').textContent = String(hours).padStart(2, '0');
-            document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
-            document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
+            document.getElementById('days').textContent = String(Math.max(0, days)).padStart(2, '0');
+            document.getElementById('hours').textContent = String(Math.max(0, hours)).padStart(2, '0');
+            document.getElementById('minutes').textContent = String(Math.max(0, minutes)).padStart(2, '0');
+            document.getElementById('seconds').textContent = String(Math.max(0, seconds)).padStart(2, '0');
         }
 
         setInterval(updateCountdown, 1000);

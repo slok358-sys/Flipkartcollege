@@ -1511,12 +1511,7 @@
             </div>
         </div>
         <div class="footer-bottom">
-            <p class="footer-copyright">© 2024 Flipkart College. All rights reserved.</p>
-            <div class="footer-socials">
-                <a href="#" class="social-link">📷</a>
-                <a href="#" class="social-link">🐦</a>
-                <a href="#" class="social-link">💼</a>
-            </div>
+            <p class="footer-copyright">© 2026 Flipkart College. All rights reserved.</p>
         </div>
     </footer>
 
@@ -1628,13 +1623,38 @@
         }
 
         createParticles();
+    </script>
 
-        // Email Capture
-        function captureEmail(inputId) {
-            const email = document.getElementById(inputId).value;
+    <script>
+        // Backend API URL
+        const API_URL = 'http://localhost:3000/api';
+
+        // Email Capture with Backend API
+        async function captureEmail(inputId) {
+            const email = document.getElementById(inputId).value.trim();
             if (email && email.includes('@')) {
-                alert('Thanks for signing up! You\'ll be the first to know when we launch. 🚀');
-                document.getElementById(inputId).value = '';
+                try {
+                    const response = await fetch(`${API_URL}/subscribe`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ email })
+                    });
+                    
+                    const data = await response.json();
+                    
+                    if (response.ok) {
+                        alert('Thanks for signing up! You\'ll be the first to know when we launch. 🚀');
+                        document.getElementById(inputId).value = '';
+                    } else if (response.status === 409) {
+                        alert('This email is already registered! 🎉');
+                        document.getElementById(inputId).value = '';
+                    } else {
+                        alert(data.error || 'Something went wrong. Please try again.');
+                    }
+                } catch (error) {
+                    console.error("Error:", error);
+                    alert('Unable to connect to server. Please try again later.');
+                }
             } else {
                 alert('Please enter a valid email address.');
             }
@@ -1651,7 +1671,6 @@
                 parallaxElements.forEach((el, index) => {
                     const speed = 0.5 + (index * 0.1);
                     const yPos = scrolled * speed;
-                    // Apply parallax as translation without breaking the float animation
                     el.style.setProperty('--parallax-y', yPos + 'px');
                 });
             });

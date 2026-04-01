@@ -1,0 +1,1671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flipkart College - Coming Soon</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Poppins:wght@600;700;800;900&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-red: #DC2626;
+            --bright-red: #FF3B3B;
+            --dark-red: #B91C1C;
+            --accent-black: #0F0F0F;
+            --dark-grey: #1A1A1A;
+            --light-grey: #2A2A2A;
+            --white: #FFFFFF;
+            --glow-red: rgba(220, 38, 38, 0.6);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--accent-black);
+            color: var(--white);
+            overflow-x: hidden;
+            cursor: none;
+        }
+
+        /* Hide custom cursor on touch devices */
+        @media (hover: none) and (pointer: coarse) {
+            body {
+                cursor: auto;
+            }
+            .cursor, .cursor-glow {
+                display: none !important;
+            }
+            .btn-primary, .btn-secondary, .btn-glow, a, button {
+                cursor: pointer;
+            }
+        }
+
+        /* Custom Cursor */
+        .cursor {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--primary-red);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.1s ease, background 0.2s ease;
+            mix-blend-mode: difference;
+        }
+
+        .cursor-glow {
+            width: 40px;
+            height: 40px;
+            background: radial-gradient(circle, var(--glow-red) 0%, transparent 70%);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9998;
+            transition: transform 0.3s ease;
+            opacity: 0.5;
+        }
+
+        /* Scroll Progress */
+        .scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-red), var(--bright-red));
+            z-index: 10000;
+            width: 0%;
+            transition: width 0.1s ease;
+        }
+
+        /* Loading Screen */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--accent-black);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10001;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+
+        .loading-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .loading-content {
+            text-align: center;
+        }
+
+        .loading-logo {
+            font-family: 'Sora', sans-serif;
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary-red), var(--bright-red));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: logoPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes logoPulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.05); }
+        }
+
+        .loading-bar {
+            width: 200px;
+            height: 4px;
+            background: var(--dark-grey);
+            border-radius: 2px;
+            margin-top: 20px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .loading-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--primary-red), var(--bright-red));
+            animation: loadingProgress 2s ease-in-out infinite;
+        }
+
+        @keyframes loadingProgress {
+            0% { width: 0%; left: 0; }
+            50% { width: 100%; left: 0; }
+            100% { width: 0%; left: 100%; }
+        }
+
+        /* Background Particles */
+        .particles-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--primary-red);
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: float 15s infinite ease-in-out;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.3; }
+            90% { opacity: 0.3; }
+            100% { transform: translateY(-100vh) rotate(720deg); opacity: 0; }
+        }
+
+        /* Animated Background */
+        .animated-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(ellipse at 20% 20%, rgba(220, 38, 38, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(255, 59, 59, 0.1) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(185, 28, 28, 0.05) 0%, transparent 70%);
+            z-index: 0;
+            animation: bgMove 20s ease-in-out infinite;
+        }
+
+        @keyframes bgMove {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(30px, -30px) scale(1.1); }
+            66% { transform: translate(-20px, 20px) scale(0.9); }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 20px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            background: rgba(15, 15, 15, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(220, 38, 38, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        nav.scrolled {
+            padding: 15px 50px;
+            background: rgba(15, 15, 15, 0.95);
+        }
+
+        .logo {
+            font-family: 'Sora', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary-red), var(--bright-red));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--white);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary-red);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--bright-red);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            padding: 120px 50px 50px;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            max-width: 1400px;
+            width: 100%;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        .hero-text {
+            animation: fadeInUp 1s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-tag {
+            display: inline-block;
+            padding: 8px 20px;
+            background: rgba(220, 38, 38, 0.15);
+            border: 1px solid var(--primary-red);
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--bright-red);
+            margin-bottom: 25px;
+            animation: glowPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes glowPulse {
+            0%, 100% { box-shadow: 0 0 10px rgba(220, 38, 38, 0.3); }
+            50% { box-shadow: 0 0 25px rgba(220, 38, 38, 0.6); }
+        }
+
+        .hero h1 {
+            font-family: 'Poppins', sans-serif;
+            font-size: clamp(2.5rem, 5vw, 4.5rem);
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 25px;
+            background: linear-gradient(135deg, var(--white) 0%, var(--bright-red) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero p {
+            font-size: 1.15rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 40px;
+            line-height: 1.6;
+            max-width: 500px;
+        }
+
+        .hero-cta {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .email-capture {
+            display: flex;
+            gap: 15px;
+            max-width: 450px;
+        }
+
+        .email-input {
+            flex: 1;
+            padding: 16px 24px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(220, 38, 38, 0.3);
+            border-radius: 12px;
+            color: var(--white);
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .email-input:focus {
+            border-color: var(--primary-red);
+            box-shadow: 0 0 20px rgba(220, 38, 38, 0.3);
+        }
+
+        .email-input::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .btn-primary {
+            padding: 16px 32px;
+            background: linear-gradient(135deg, var(--primary-red), var(--bright-red));
+            border: none;
+            border-radius: 12px;
+            color: var(--white);
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: none;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(220, 38, 38, 0.4);
+        }
+
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(220, 38, 38, 0.6);
+        }
+
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+
+        .btn-secondary {
+            padding: 14px 28px;
+            background: transparent;
+            border: 2px solid var(--primary-red);
+            border-radius: 12px;
+            color: var(--white);
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: none;
+            transition: all 0.3s ease;
+            align-self: flex-start;
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary-red);
+            transform: translateY(-2px);
+        }
+
+        /* Floating Cards */
+        .hero-visual {
+            position: relative;
+            height: 500px;
+            perspective: 1000px;
+        }
+
+        .floating-card {
+            position: absolute;
+            width: 220px;
+            height: 280px;
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(220, 38, 38, 0.3);
+            border-radius: 20px;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            transition: all 0.5s ease;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .floating-card:hover {
+            transform: scale(1.05) rotateY(5deg);
+            border-color: var(--primary-red);
+            box-shadow: 0 0 40px rgba(220, 38, 38, 0.4);
+        }
+
+        .floating-card:nth-child(1) {
+            top: 0;
+            left: 0;
+            animation: float1 6s ease-in-out infinite;
+        }
+
+        .floating-card:nth-child(2) {
+            top: 50px;
+            right: 0;
+            animation: float2 7s ease-in-out infinite;
+        }
+
+        .floating-card:nth-child(3) {
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: float3 8s ease-in-out infinite;
+        }
+
+        @keyframes float1 {
+            0%, 100% { transform: translateY(0) rotate(-5deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+        }
+
+        @keyframes float2 {
+            0%, 100% { transform: translateY(0) rotate(5deg); }
+            50% { transform: translateY(-25px) rotate(-5deg); }
+        }
+
+        @keyframes float3 {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(-15px); }
+        }
+
+        .card-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary-red), var(--dark-red));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+        }
+
+        .card-title {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 1.1rem;
+            text-align: center;
+        }
+
+        .card-subtitle {
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.6);
+            text-align: center;
+        }
+
+        /* Section Styles */
+        section {
+            position: relative;
+            z-index: 10;
+            padding: 100px 50px;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-tag {
+            display: inline-block;
+            padding: 6px 16px;
+            background: rgba(220, 38, 38, 0.15);
+            border: 1px solid var(--primary-red);
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--bright-red);
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .section-subtitle {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.6);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Product Preview Section */
+        .product-preview {
+            background: linear-gradient(180deg, transparent 0%, rgba(220, 38, 38, 0.03) 50%, transparent 100%);
+        }
+
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .category-card {
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(220, 38, 38, 0.2);
+            border-radius: 24px;
+            padding: 40px 30px;
+            text-align: center;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            cursor: none;
+        }
+
+        .category-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(220, 38, 38, 0.1), transparent);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .category-card:hover::before {
+            opacity: 1;
+        }
+
+        .category-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            border-color: var(--primary-red);
+            box-shadow: 0 20px 60px rgba(220, 38, 38, 0.3);
+        }
+
+        .category-icon {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, var(--primary-red), var(--bright-red));
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px;
+            font-size: 3rem;
+            transition: transform 0.4s ease;
+        }
+
+        .category-card:hover .category-icon {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        .category-name {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .category-desc {
+            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.6);
+            line-height: 1.5;
+        }
+
+        .category-items {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .category-item {
+            padding: 6px 14px;
+            background: rgba(220, 38, 38, 0.15);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            color: var(--bright-red);
+        }
+
+        /* Value Section */
+        .value-section {
+            background: var(--dark-grey);
+        }
+
+        .value-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .value-item {
+            text-align: center;
+            padding: 30px;
+            transition: all 0.3s ease;
+        }
+
+        .value-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .value-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, var(--primary-red), var(--dark-red));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .value-item:hover .value-icon {
+            transform: scale(1.1);
+            box-shadow: 0 0 30px rgba(220, 38, 38, 0.5);
+        }
+
+        .value-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .value-desc {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        /* Countdown Section */
+        .countdown-section {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .countdown-section::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(220, 38, 38, 0.2) 0%, transparent 70%);
+            transform: translate(-50%, -50%);
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+            50% { transform: translate(-50%, -50%) scale(1.2); opacity: 0.8; }
+        }
+
+        .countdown-container {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        .countdown-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 800;
+            margin-bottom: 40px;
+            background: linear-gradient(135deg, var(--white), var(--bright-red));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: textGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes textGlow {
+            0%, 100% { filter: drop-shadow(0 0 10px rgba(220, 38, 38, 0.5)); }
+            50% { filter: drop-shadow(0 0 30px rgba(255, 59, 59, 0.8)); }
+        }
+
+        .countdown-timer {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 50px;
+            flex-wrap: wrap;
+        }
+
+        .time-unit {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(220, 38, 38, 0.3);
+            border-radius: 20px;
+            padding: 30px 40px;
+            min-width: 120px;
+            transition: all 0.3s ease;
+        }
+
+        .time-unit:hover {
+            transform: scale(1.05);
+            border-color: var(--primary-red);
+            box-shadow: 0 10px 40px rgba(220, 38, 38, 0.3);
+        }
+
+        .time-value {
+            font-family: 'Sora', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: var(--bright-red);
+            line-height: 1;
+        }
+
+        .time-label {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.6);
+            margin-top: 10px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .progress-container {
+            max-width: 500px;
+            margin: 0 auto 30px;
+        }
+
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 75%;
+            background: linear-gradient(90deg, var(--primary-red), var(--bright-red));
+            border-radius: 4px;
+            animation: progressShine 3s ease-in-out infinite;
+            position: relative;
+        }
+
+        @keyframes progressShine {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: progressSweep 2s ease-in-out infinite;
+        }
+
+        @keyframes progressSweep {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .launch-text {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .launch-text span {
+            color: var(--bright-red);
+            font-weight: 600;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: linear-gradient(135deg, rgba(220, 38, 38, 0.1), rgba(185, 28, 28, 0.05));
+            text-align: center;
+        }
+
+        .cta-container {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .cta-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        .cta-subtitle {
+            font-size: 1.1rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 40px;
+        }
+
+        .cta-form {
+            display: flex;
+            gap: 15px;
+            max-width: 500px;
+            margin: 0 auto 20px;
+            flex-wrap: wrap;
+        }
+
+        .cta-input {
+            flex: 1;
+            min-width: 250px;
+            padding: 18px 28px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(220, 38, 38, 0.3);
+            border-radius: 14px;
+            color: var(--white);
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .cta-input:focus {
+            border-color: var(--primary-red);
+            box-shadow: 0 0 30px rgba(220, 38, 38, 0.4);
+        }
+
+        .cta-input::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .btn-glow {
+            padding: 18px 40px;
+            background: linear-gradient(135deg, var(--primary-red), var(--bright-red));
+            border: none;
+            border-radius: 14px;
+            color: var(--white);
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 1.1rem;
+            cursor: none;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            animation: buttonGlow 2s ease-in-out infinite;
+        }
+
+        @keyframes buttonGlow {
+            0%, 100% { box-shadow: 0 4px 20px rgba(220, 38, 38, 0.4); }
+            50% { box-shadow: 0 8px 40px rgba(255, 59, 59, 0.6), 0 0 60px rgba(220, 38, 38, 0.3); }
+        }
+
+        .btn-glow:hover {
+            transform: translateY(-3px) scale(1.02);
+        }
+
+        .cta-microcopy {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .cta-microcopy span {
+            color: var(--bright-red);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--accent-black);
+            border-top: 1px solid rgba(220, 38, 38, 0.1);
+            padding: 60px 50px 30px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 60px;
+            margin-bottom: 50px;
+        }
+
+        .footer-brand {
+            max-width: 300px;
+        }
+
+        .footer-logo {
+            font-family: 'Sora', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary-red), var(--bright-red));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 15px;
+        }
+
+        .footer-desc {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.6);
+            line-height: 1.6;
+        }
+
+        .footer-column h4 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: var(--white);
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 12px;
+        }
+
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--bright-red);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .footer-copyright {
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .footer-socials {
+            display: flex;
+            gap: 20px;
+        }
+
+        .social-link {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(220, 38, 38, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            text-decoration: none;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+
+        .social-link:hover {
+            background: var(--primary-red);
+            border-color: var(--primary-red);
+            transform: translateY(-3px);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .hero-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .hero-text p {
+                margin: 0 auto 40px;
+            }
+
+            .email-capture {
+                margin: 0 auto;
+            }
+
+            .btn-secondary {
+                align-self: center;
+            }
+
+            .hero-visual {
+                height: 400px;
+                order: -1;
+            }
+
+            .floating-card {
+                width: 180px;
+                height: 240px;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                padding: 15px 20px;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            section {
+                padding: 60px 20px;
+            }
+
+            .hero {
+                padding: 100px 20px 40px;
+                min-height: auto;
+            }
+
+            .hero-content {
+                gap: 30px;
+            }
+
+            .hero-visual {
+                height: 300px;
+                order: -1;
+                position: relative;
+                width: 100%;
+            }
+
+            .floating-card {
+                width: 140px;
+                height: 180px;
+                padding: 15px;
+                position: absolute;
+            }
+
+            .floating-card:nth-child(1) {
+                top: 10px;
+                left: 5%;
+                animation: float1 4s ease-in-out infinite;
+            }
+
+            .floating-card:nth-child(2) {
+                top: 10px;
+                right: 5%;
+                left: auto;
+                animation: float2 5s ease-in-out infinite;
+            }
+
+            .floating-card:nth-child(3) {
+                bottom: 10px;
+                left: 50%;
+                top: auto;
+                transform: translateX(-50%);
+                animation: float3 6s ease-in-out infinite;
+            }
+
+            .card-icon {
+                width: 50px;
+                height: 50px;
+                font-size: 1.8rem;
+            }
+
+            .card-title {
+                font-size: 0.9rem;
+            }
+
+            .card-subtitle {
+                font-size: 0.75rem;
+            }
+
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .email-capture {
+                flex-direction: column;
+                max-width: 100%;
+            }
+
+            .email-input {
+                width: 100%;
+            }
+
+            .time-value {
+                font-size: 2rem;
+            }
+
+            .time-unit {
+                padding: 15px 20px;
+                min-width: 70px;
+            }
+
+            .time-label {
+                font-size: 0.75rem;
+                letter-spacing: 1px;
+            }
+
+            .countdown-timer {
+                gap: 10px;
+            }
+
+            .cta-form {
+                flex-direction: column;
+            }
+
+            .cta-input {
+                min-width: 100%;
+            }
+
+            .btn-glow {
+                width: 100%;
+            }
+
+            .categories-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .category-card {
+                padding: 30px 20px;
+            }
+
+            .value-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 20px;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            /* Disable parallax on mobile */
+            .floating-card {
+                will-change: auto;
+            }
+        }
+
+        /* Extra small screens */
+        @media (max-width: 480px) {
+            .time-value {
+                font-size: 1.5rem;
+            }
+
+            .time-unit {
+                padding: 12px 15px;
+                min-width: 60px;
+            }
+
+            .floating-card {
+                width: 110px;
+                height: 150px;
+            }
+
+            .card-icon {
+                width: 40px;
+                height: 40px;
+                font-size: 1.4rem;
+            }
+
+            .value-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Parallax Effect */
+        .parallax {
+            will-change: transform;
+        }
+
+        /* Reveal Animation */
+        .reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s ease;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-content">
+            <div class="loading-logo">Flipkart College</div>
+            <div class="loading-bar"></div>
+        </div>
+    </div>
+
+    <!-- Scroll Progress -->
+    <div class="scroll-progress" id="scrollProgress"></div>
+
+    <!-- Custom Cursor -->
+    <div class="cursor" id="cursor"></div>
+    <div class="cursor-glow" id="cursorGlow"></div>
+
+    <!-- Animated Background -->
+    <div class="animated-bg"></div>
+
+    <!-- Particles Container -->
+    <div class="particles-container" id="particles"></div>
+
+    <!-- Navigation -->
+    <nav id="navbar">
+        <div class="logo">Flipkart College</div>
+        <ul class="nav-links">
+            <li><a href="#products">Products</a></li>
+            <li><a href="#why-us">Why Us</a></li>
+            <li><a href="#launch">Launch</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <div class="hero-text">
+                <div class="hero-tag">🚀 Launching Soon</div>
+                <h1>Everything You Need for College — Coming Soon</h1>
+                <p>From hostel essentials to must-have gadgets — we've got it all. Get ready for the ultimate student shopping experience.</p>
+                <div class="hero-cta">
+                    <div class="email-capture">
+                        <input type="email" class="email-input" placeholder="Enter your email" id="heroEmail">
+                        <button class="btn-primary" onclick="captureEmail('heroEmail')">Get Early Access</button>
+                    </div>
+                    <button class="btn-secondary" onclick="scrollToSection('products')">Explore Products</button>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="floating-card">
+                    <div class="card-icon">🎧</div>
+                    <div class="card-title">Gadgets</div>
+                    <div class="card-subtitle">Tech for students</div>
+                </div>
+                <div class="floating-card">
+                    <div class="card-icon">🎒</div>
+                    <div class="card-title">Essentials</div>
+                    <div class="card-subtitle">Daily must-haves</div>
+                </div>
+                <div class="floating-card">
+                    <div class="card-icon">🛏️</div>
+                    <div class="card-title">Hostel Setup</div>
+                    <div class="card-subtitle">Room upgrades</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Product Preview Section -->
+    <section class="product-preview" id="products">
+        <div class="section-header reveal">
+            <div class="section-tag">🎒 What&apos;s Coming</div>
+            <h2 class="section-title">Product Categories</h2>
+            <p class="section-subtitle">Curated collections designed specifically for college life</p>
+        </div>
+        <div class="categories-grid">
+            <div class="category-card reveal">
+                <div class="category-icon">🎧</div>
+                <h3 class="category-name">Gadgets</h3>
+                <p class="category-desc">Headphones, power banks, laptop accessories, and smart devices for the modern student.</p>
+                <div class="category-items">
+                    <span class="category-item">Headphones</span>
+                    <span class="category-item">Power Banks</span>
+                    <span class="category-item">Laptop Stands</span>
+                </div>
+            </div>
+            <div class="category-card reveal">
+                <div class="category-icon">🎒</div>
+                <h3 class="category-name">College Essentials</h3>
+                <p class="category-desc">Backpacks, stationery, water bottles, and everything you carry to campus daily.</p>
+                <div class="category-items">
+                    <span class="category-item">Backpacks</span>
+                    <span class="category-item">Stationery</span>
+                    <span class="category-item">Water Bottles</span>
+                </div>
+            </div>
+            <div class="category-card reveal">
+                <div class="category-icon">📚</div>
+                <h3 class="category-name">Study Gear</h3>
+                <p class="category-desc">Desk organizers, study lamps, notebooks, and tools to boost productivity.</p>
+                <div class="category-items">
+                    <span class="category-item">Desk Lamps</span>
+                    <span class="category-item">Organizers</span>
+                    <span class="category-item">Notebooks</span>
+                </div>
+            </div>
+            <div class="category-card reveal">
+                <div class="category-icon">🛏️</div>
+                <h3 class="category-name">Hostel Setup</h3>
+                <p class="category-desc">Bedding, storage solutions, room decor, and comfort items for your home away from home.</p>
+                <div class="category-items">
+                    <span class="category-item">Bedding</span>
+                    <span class="category-item">Storage</span>
+                    <span class="category-item">Room Decor</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Value Section -->
+    <section class="value-section" id="why-us">
+        <div class="section-header reveal">
+            <div class="section-tag">⚡ Why Choose Us</div>
+            <h2 class="section-title">Built for Students</h2>
+            <p class="section-subtitle">We understand college life because we've lived it</p>
+        </div>
+        <div class="value-grid">
+            <div class="value-item reveal">
+                <div class="value-icon">💰</div>
+                <h3 class="value-title">Student Pricing</h3>
+                <p class="value-desc">Affordable prices with exclusive student discounts and deals.</p>
+            </div>
+            <div class="value-item reveal">
+                <div class="value-icon">🎯</div>
+                <h3 class="value-title">Curated for College</h3>
+                <p class="value-desc">Every product handpicked for college life - no fluff, just essentials.</p>
+            </div>
+            <div class="value-item reveal">
+                <div class="value-icon">🚚</div>
+                <h3 class="value-title">Fast Delivery</h3>
+                <p class="value-desc">Quick delivery to hostels and campuses across the country.</p>
+            </div>
+            <div class="value-item reveal">
+                <div class="value-icon">🔥</div>
+                <h3 class="value-title">Trendy & Useful</h3>
+                <p class="value-desc">Products that are both stylish and practical for student life.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Countdown Section -->
+    <section class="countdown-section" id="launch">
+        <div class="countdown-container">
+            <div class="reveal">
+                <div class="section-tag">🔥 Launch Countdown</div>
+                <h2 class="countdown-title">Launching Soon</h2>
+            </div>
+            <div class="countdown-timer reveal" id="countdownTimer">
+                <div class="time-unit">
+                    <div class="time-value" id="days">00</div>
+                    <div class="time-label">Days</div>
+                </div>
+                <div class="time-unit">
+                    <div class="time-value" id="hours">00</div>
+                    <div class="time-label">Hours</div>
+                </div>
+                <div class="time-unit">
+                    <div class="time-value" id="minutes">00</div>
+                    <div class="time-label">Minutes</div>
+                </div>
+                <div class="time-unit">
+                    <div class="time-value" id="seconds">00</div>
+                    <div class="time-label">Seconds</div>
+                </div>
+            </div>
+            <div class="progress-container reveal">
+                <div class="progress-label">
+                    <span>Platform Readiness</span>
+                    <span>75%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill"></div>
+                </div>
+            </div>
+            <p class="launch-text reveal">Get ready for something <span>big</span>. Early access members get exclusive deals.</p>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section" id="contact">
+        <div class="cta-container reveal">
+            <h2 class="cta-title">Be First to Access Exclusive Deals</h2>
+            <p class="cta-subtitle">Join thousands of students on the waitlist and get priority access when we launch.</p>
+            <div class="cta-form">
+                <input type="email" class="cta-input" placeholder="Enter your email address" id="ctaEmail">
+                <button class="btn-glow" onclick="captureEmail('ctaEmail')">Notify Me</button>
+            </div>
+            <p class="cta-microcopy">Get early discounts + priority access. <span>No spam, ever.</span></p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <div class="footer-logo">Flipkart College</div>
+                <p class="footer-desc">The ultimate destination for college essentials. Making student life easier, one product at a time.</p>
+            </div>
+            <div class="footer-column">
+                <h4>Company</h4>
+                <ul class="footer-links">
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Careers</a></li>
+                    <li><a href="#">Press</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Support</h4>
+                <ul class="footer-links">
+                    <li><a href="#">Help Center</a></li>
+                    <li><a href="#">Contact Us</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Connect</h4>
+                <ul class="footer-links">
+                    <li><a href="#">Instagram</a></li>
+                    <li><a href="#">Twitter</a></li>
+                    <li><a href="#">LinkedIn</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p class="footer-copyright">© 2024 Flipkart College. All rights reserved.</p>
+            <div class="footer-socials">
+                <a href="#" class="social-link">📷</a>
+                <a href="#" class="social-link">🐦</a>
+                <a href="#" class="social-link">💼</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Loading Screen
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('loadingScreen').classList.add('hidden');
+            }, 2000);
+        });
+
+        // Custom Cursor
+        const cursor = document.getElementById('cursor');
+        const cursorGlow = document.getElementById('cursorGlow');
+
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX - 10 + 'px';
+            cursor.style.top = e.clientY - 10 + 'px';
+            cursorGlow.style.left = e.clientX - 20 + 'px';
+            cursorGlow.style.top = e.clientY - 20 + 'px';
+        });
+
+        // Cursor effects on interactive elements
+        const interactiveElements = document.querySelectorAll('a, button, .category-card, .floating-card, .time-unit');
+        interactiveElements.forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                cursor.style.transform = 'scale(1.5)';
+                cursor.style.background = 'var(--primary-red)';
+                cursorGlow.style.transform = 'scale(2)';
+                cursorGlow.style.opacity = '0.8';
+            });
+            el.addEventListener('mouseleave', () => {
+                cursor.style.transform = 'scale(1)';
+                cursor.style.background = 'transparent';
+                cursorGlow.style.transform = 'scale(1)';
+                cursorGlow.style.opacity = '0.5';
+            });
+        });
+
+        // Scroll Progress
+        window.addEventListener('scroll', () => {
+            const scrollProgress = document.getElementById('scrollProgress');
+            const scrollTop = window.scrollY;
+            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const scrollPercent = (scrollTop / docHeight) * 100;
+            scrollProgress.style.width = scrollPercent + '%';
+
+            // Navbar scroll effect
+            const navbar = document.getElementById('navbar');
+            if (scrollTop > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Smooth Scroll
+        function scrollToSection(sectionId) {
+            document.getElementById(sectionId).scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Countdown Timer
+        function updateCountdown() {
+            const launchDate = new Date();
+            launchDate.setDate(launchDate.getDate() + 30); // Launch in 30 days
+
+            const now = new Date().getTime();
+            const distance = launchDate - now;
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById('days').textContent = String(days).padStart(2, '0');
+            document.getElementById('hours').textContent = String(hours).padStart(2, '0');
+            document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
+            document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
+        }
+
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+
+        // Reveal Animation on Scroll
+        const revealElements = document.querySelectorAll('.reveal');
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        revealElements.forEach(el => revealObserver.observe(el));
+
+        // Create Particles
+        function createParticles() {
+            const container = document.getElementById('particles');
+            const particleCount = 50;
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 15 + 's';
+                particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
+                container.appendChild(particle);
+            }
+        }
+
+        createParticles();
+
+        // Email Capture
+        function captureEmail(inputId) {
+            const email = document.getElementById(inputId).value;
+            if (email && email.includes('@')) {
+                alert('Thanks for signing up! You\'ll be the first to know when we launch. 🚀');
+                document.getElementById(inputId).value = '';
+            } else {
+                alert('Please enter a valid email address.');
+            }
+        }
+
+        // Parallax Effect (disabled on mobile)
+        const isTouchDevice = window.matchMedia('(hover: none) and (pointer: coarse)').matches;
+        
+        if (!isTouchDevice) {
+            window.addEventListener('scroll', () => {
+                const scrolled = window.pageYOffset;
+                const parallaxElements = document.querySelectorAll('.floating-card');
+                
+                parallaxElements.forEach((el, index) => {
+                    const speed = 0.5 + (index * 0.1);
+                    const yPos = scrolled * speed;
+                    // Apply parallax as translation without breaking the float animation
+                    el.style.setProperty('--parallax-y', yPos + 'px');
+                });
+            });
+        }
+
+        // Enter key for email inputs
+        document.getElementById('heroEmail').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') captureEmail('heroEmail');
+        });
+
+        document.getElementById('ctaEmail').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') captureEmail('ctaEmail');
+        });
+    </script>
+</body>
+</html>
